@@ -22,10 +22,10 @@ public class UserFeedback extends InputSystem {
 	public void showInputMessage() {
 		switch (completed_inputs) {
 		case 0:
-			System.out.print("House ID: ");
+			System.out.print("House ID you wish to give feedback on: ");
 			break;
 		case 1:
-			System.out.print("House score: ");
+			System.out.print("Score you would like to give this house: ");
 			break;
 		case 2:
 			System.out.print("Review: ");
@@ -43,7 +43,6 @@ public class UserFeedback extends InputSystem {
 			hid = Integer.parseInt(input);
 			super.addInputs();
 			break;
-		
 		case 1:
 			score = Integer.parseInt(input);
 			super.addInputs();
@@ -77,7 +76,7 @@ public class UserFeedback extends InputSystem {
 			String query = "SELECT * FROM Feedback WHERE hid='"+hid+"' AND login= '"+login+"'";
 			ResultSet results = stmt.executeQuery(query);
 			if (results.isBeforeFirst()) {
-				System.out.println("\nYou have already gave feedback on this house\n");
+				System.out.println("\nYou have already gave feedback on this house.\n");
 			}
 			else {
 				DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

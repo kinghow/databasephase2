@@ -27,6 +27,7 @@ public class MainClass {
 		System.out.println(" 4. Show Your Available Listings");
 		System.out.println(" 5. Update Available Dates for a Listing");
 		System.out.println(" 6. Show Other Available Listings");
+		System.out.println(" 7. Rate a User's Feedback");
 		System.out.println(" 8. Give Feedback on a House");
 		System.out.println(" 9. Add Favourite House");
 		System.out.println("10. Declare/Update Trust on User");
@@ -137,7 +138,15 @@ public class MainClass {
 						updListDates.sendQuery(con.stmt);
 					} else if (optionInt == 6) {
 						ShowTables.displayAvailableUserListings(login, con.stmt);
-					}  else if (optionInt == 8) {
+					} else if (optionInt == 7) {
+						UsefulnessRating rating = new UsefulnessRating(login);
+						while (rating.hasMoreInputs()) {
+							rating.showInputMessage();
+							while ((inputStr = input.readLine()) == null && inputStr.length() == 0);
+							rating.storeInput(inputStr, con.stmt);
+						}
+						rating.sendQuery(con.stmt);
+					} else if (optionInt == 8) {
 						UserFeedback fdbk = new UserFeedback(login);
 						while (fdbk.hasMoreInputs()) {
 							fdbk.showInputMessage();
