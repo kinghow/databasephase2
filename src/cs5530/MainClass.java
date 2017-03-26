@@ -135,7 +135,7 @@ public class MainClass {
 						}
 						updListDates.sendQuery(con.stmt);
 					} else if (optionInt == 6) {
-						ShowTables.displayAvailableUserListings(login, con.stmt);
+						ShowTables.displayOtherUserListings(login, con.stmt);
 					} else if (optionInt == 9) {
 						UserFavorite fav = new UserFavorite(login);
 						while (fav.hasMoreInputs()) {
