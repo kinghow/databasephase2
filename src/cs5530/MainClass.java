@@ -5,7 +5,7 @@ import java.io.*;
 public class MainClass {
 
 	private static final int MAX_MAIN_OPTIONS = 2;
-	private static final int MAX_USER_OPTIONS = 10;
+	private static final int MAX_USER_OPTIONS = 16;
 	
 	private static String login;
 	
@@ -25,10 +25,10 @@ public class MainClass {
 		System.out.println(" 4. Show Your Available Listings");
 		System.out.println(" 5. Update Available Dates for a Listing");
 		System.out.println(" 6. Show Other Available Listings");
-		System.out.println(" 7. Rate a User's Feedback");
-		System.out.println(" 8. Give Feedback on a House");
-		System.out.println(" 9. Add Favourite House");
-		System.out.println("10. Declare/Update Trust on User");
+		System.out.println("13. Rate a User's Feedback");
+		System.out.println("14. Give Feedback on a House");
+		System.out.println("15. Add Favourite House");
+		System.out.println("16. Declare/Update Trust on User");
 		System.out.println(" 0. Log Out");
 		System.out.print("Please choose an option: ");
 	}
@@ -134,7 +134,7 @@ public class MainClass {
 						updListDates.sendQuery(con.stmt);
 					} else if (optionInt == 6) {
 						ShowTables.displayOtherUserListings(login, con.stmt);
-					} else if (optionInt == 7) {
+					} else if (optionInt == 13) {
 						UsefulnessRating rating = new UsefulnessRating(login);
 						while (rating.hasMoreInputs()) {
 							rating.showInputMessage();
@@ -142,7 +142,7 @@ public class MainClass {
 							rating.storeInput(inputStr, con.stmt);
 						}
 						rating.sendQuery(con.stmt);
-					} else if (optionInt == 8) {
+					} else if (optionInt == 14) {
 						UserFeedback fdbk = new UserFeedback(login);
 						while (fdbk.hasMoreInputs()) {
 							fdbk.showInputMessage();
@@ -150,7 +150,7 @@ public class MainClass {
 							fdbk.storeInput(inputStr, con.stmt);
 						}
 						fdbk.sendQuery(con.stmt);
-					} else if (optionInt == 9) {
+					} else if (optionInt == 15) {
 						UserFavorite fav = new UserFavorite(login);
 						while (fav.hasMoreInputs()) {
 							fav.showInputMessage();
@@ -158,7 +158,7 @@ public class MainClass {
 							fav.storeInput(inputStr, con.stmt);
 						}
 						fav.sendQuery(con.stmt);
-					} else if (optionInt == 10) {
+					} else if (optionInt == 16) {
 						DeclareTrust trust = new DeclareTrust(login);
 						while (trust.hasMoreInputs()) {
 							trust.showInputMessage();
