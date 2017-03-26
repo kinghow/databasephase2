@@ -8,45 +8,41 @@ public class UserRegistration extends InputSystem {
 	private String password;
 	private String full_name;
 	private String phone_num;
-	private String user_type;
 	private String street;
 	private String city;
 	private String state;
 	private String zipcode;
 	
 	public UserRegistration() {
-		super(9);
+		super(8);
 	}
 	
 	@Override
 	public void showInputMessage() {
 		switch (completed_inputs) {
 		case 0:
-			System.out.print("Please enter a login name: ");
+			System.out.print("Username: ");
 			break;
 		case 1:
-			System.out.print("Please enter a password: ");
+			System.out.print("Password: ");
 			break;
 		case 2:
-			System.out.print("Please enter your full name: ");
+			System.out.print("Full name: ");
 			break;
 		case 3:
-			System.out.print("Please enter your phone number: ");
+			System.out.print("Phone number: ");
 			break;
 		case 4:
-			System.out.print("Enter 0 for a host user type or 1 for a visitor user type: ");
+			System.out.print("Street: ");
 			break;
 		case 5:
-			System.out.print("Please enter the street of your address: ");
+			System.out.print("City: ");
 			break;
 		case 6:
-			System.out.print("Please enter the city of your address: ");
+			System.out.print("State: ");
 			break;
 		case 7:
-			System.out.print("Please enter the state of your address: ");
-			break;
-		case 8:
-			System.out.print("Please enter the zipcode of your address: ");
+			System.out.print("Zipcode: ");
 			break;
 		default:
 			break;
@@ -62,7 +58,7 @@ public class UserRegistration extends InputSystem {
 			try {
 				String query = "SELECT * FROM Users WHERE login='"+input+"'";
 				ResultSet results = stmt.executeQuery(query);
-				failed = results.next();
+				failed = results.first();
 				if (!failed) {
 					login = input;
 					super.addInputs();
@@ -83,32 +79,18 @@ public class UserRegistration extends InputSystem {
 			super.addInputs();
 			break;
 		case 4:
-			try {
-				int inputInt = Integer.parseInt(input);
-				if (inputInt < 0 || inputInt > 1) {
-					System.out.println("Please enter 0 or 1.");
-					break;
-				}
-			} catch (Exception e) {
-				System.out.println("Please enter an integer");
-				break;
-			}
-			user_type = input;
-			super.addInputs();
-			break;
-		case 5:
 			street = input;
 			super.addInputs();
 			break;
-		case 6:
+		case 5:
 			city = input;
 			super.addInputs();
 			break;
-		case 7:
+		case 6:
 			state = input;
 			super.addInputs();
 			break;
-		case 8:
+		case 7:
 			zipcode = input;
 			super.addInputs();
 			break;
@@ -127,13 +109,13 @@ public class UserRegistration extends InputSystem {
 			String query = "SELECT * FROM Address WHERE street='"+street+"' AND city='"+city+"' AND state='"+state+
 					"' AND zipcode='"+zipcode+"'";
 			ResultSet results = stmt.executeQuery(query);
-			if (!results.next()) {
+			if (!results.first()) {
 				query = "INSERT INTO Address VALUES ('"+street+"','"+city+"','"+state+"','"+zipcode+"')";
 				stmt.executeUpdate(query);
 			}
 			
-			query = "INSERT INTO Users VALUES ('"+login+"','"+password+"','"+full_name+"','"+phone_num+"',"+user_type+
-					",'"+street+"','"+city+"','"+state+"','"+zipcode+"')";
+			query = "INSERT INTO Users VALUES ('"+login+"','"+password+"','"+full_name+"','"+phone_num+"',0,'"
+					+street+"','"+city+"','"+state+"','"+zipcode+"')";
 			
 			int status = stmt.executeUpdate(query);
 			if (status == 0) {

@@ -3,9 +3,8 @@ package cs5530;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-public class UpdateListing extends InputSystem {
+public class NewListing extends InputSystem {
 	
-	private int hid;
 	private String category;
 	private String name;
 	private String url;
@@ -18,8 +17,8 @@ public class UpdateListing extends InputSystem {
 	private String state;
 	private String zipcode;
 	
-	public UpdateListing(String login) {
-		super(11);
+	public NewListing(String login) {
+		super(10);
 		this.login = login;
 	}
 
@@ -27,36 +26,33 @@ public class UpdateListing extends InputSystem {
 	public void showInputMessage() {
 		switch (completed_inputs) {
 		case 0:
-			System.out.print("Hid of record to be updated: ");
-			break;
-		case 1:
 			System.out.print("TH name: ");
 			break;
-		case 2:
+		case 1:
 			System.out.print("Category: ");
 			break;
-		case 3:
+		case 2:
 			System.out.print("URL: ");
 			break;
-		case 4:
+		case 3:
 			System.out.print("Phone number: ");
 			break;
-		case 5:
+		case 4:
 			System.out.print("Year built (YYYY): ");
 			break;
-		case 6:
+		case 5:
 			System.out.print("Price per night: ");
 			break;
-		case 7:
+		case 6:
 			System.out.print("Street: ");
 			break;
-		case 8:
+		case 7:
 			System.out.print("City: ");
 			break;
-		case 9:
+		case 8:
 			System.out.print("State: ");
 			break;
-		case 10:
+		case 9:
 			System.out.print("Zipcode: ");
 			break;
 		default:
@@ -68,46 +64,42 @@ public class UpdateListing extends InputSystem {
 	public void storeInput(String input, Statement stmt) throws Exception {
 		switch (completed_inputs) {
 		case 0:
-			hid = Integer.parseInt(input);
-			super.addInputs();
-			break;
-		case 1:
 			name = input;
 			super.addInputs();
 			break;
-		case 2:
+		case 1:
 			category = input;
 			super.addInputs();
 			break;
-		case 3:
+		case 2:
 			url = input;
 			super.addInputs();
 			break;
-		case 4:
+		case 3:
 			phone_num = input;
 			super.addInputs();
 			break;
-		case 5:
+		case 4:
 			year_built = Integer.parseInt(input);
 			super.addInputs();
 			break;
-		case 6:
+		case 5:
 			price = Double.parseDouble(input);
 			super.addInputs();
 			break;
-		case 7:
+		case 6:
 			street = input;
 			super.addInputs();
 			break;
-		case 8:
+		case 7:
 			city = input;
 			super.addInputs();
 			break;
-		case 9:
+		case 8:
 			state = input;
 			super.addInputs();
 			break;
-		case 10:
+		case 9:
 			zipcode = input;
 			super.addInputs();
 			break;
@@ -131,14 +123,17 @@ public class UpdateListing extends InputSystem {
 				stmt.executeUpdate(query);
 			}
 			
-			query = "UPDATE TH SET name='"+name+"', category='"+category+"', url='"+url+"', phone_num='"+phone_num+"', year_built="+year_built+
-					", price="+price+", street='"+street+"', city='"+city+"', state='"+state+"', zipcode='"+zipcode+"' WHERE hid="+hid+" AND login='"+login+"'";
+			query = "INSERT INTO TH (category, name, url, phone_num, year_built, price, login, street, city, state, zipcode)"
+					+ " VALUES ('"+category+"','"+name+"','"+url+"','"+phone_num+"','"+year_built+"','"+price+"','"+login+"','"
+					+street+"','"+city+"','"+state+"','"+zipcode+"')";
 			
 			int status = stmt.executeUpdate(query);
-			if (status == 0)
-				System.out.println("\nHid does not exist or you do not have the permissions to edit the listing.\n");
-			else
-				System.out.println("\nRecord updated.\n");
+			if (status == 0) {
+				System.err.println("Query failed. TH was not created.");
+				return;
+			}
+			
+			System.out.println("\nTH created.\n");
 		} catch (Exception e) { throw(e); }
 	}
 }

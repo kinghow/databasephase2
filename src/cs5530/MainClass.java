@@ -7,7 +7,7 @@ import java.io.*;
 public class MainClass {
 
 	private static final int MAX_MAIN_OPTIONS = 2;
-	private static final int MAX_USER_OPTIONS = 2;
+	private static final int MAX_USER_OPTIONS = 10;
 	
 	private static String login;
 	
@@ -21,9 +21,11 @@ public class MainClass {
 	
 	// User menu
 	public static void displayUserMenu() {
-		System.out.println("1. New/Update Listings");
-		System.out.println("2. Menu");
-		System.out.println("0. Main Menu");
+		System.out.println(" 1. Show Your Listings");
+		System.out.println(" 2. New Listing");
+		System.out.println(" 3. Update Listing");
+		System.out.println("10. Declare/Update Trust on User");
+		System.out.println(" 0. Main Menu");
 		System.out.print("Please choose an option: ");
 	}
 	
@@ -100,38 +102,32 @@ public class MainClass {
 					
 					// login
 					if (optionInt == 1) {
-						UserLogin log = new UserLogin();
-						while (log.hasMoreInputs()) {
-							log.showInputMessage();
-							while ((inputStr = input.readLine()) == null && inputStr.length() == 0);
-							log.storeInput(inputStr, con.stmt);
-						}
-						login = log.login(con.stmt);
+						ShowTables.displayUserListings(login, con.stmt);
 					// register
 					} else if (optionInt == 2) {
-						UserRegistration reg = new UserRegistration();
-						while (reg.hasMoreInputs()) {
-							reg.showInputMessage();
+						NewListing newList = new NewListing(login);
+						while (newList.hasMoreInputs()) {
+							newList.showInputMessage();
 							while ((inputStr = input.readLine()) == null && inputStr.length() == 0);
-							reg.storeInput(inputStr, con.stmt);
+							newList.storeInput(inputStr, con.stmt);
 						}
-						reg.sendQuery(con.stmt);
-						//				} else if (optionInt == 2) {	 
-						//					System.out.println("please enter your query below:");
-						//					while ((sql = input.readLine()) == null && sql.length() == 0)
-						//						System.out.println(sql);
-						//					ResultSet rs=con.stmt.executeQuery(sql);
-						//					ResultSetMetaData rsmd = rs.getMetaData();
-						//					int numCols = rsmd.getColumnCount();
-						//					while (rs.next()) {
-						//						//System.out.print("cname:");
-						//						for (int i=1; i<=numCols;i++)
-						//							System.out.print(rs.getString(i)+"  ");
-						//						System.out.println("");
-						//					}
-						//					System.out.println(" ");
-						//					rs.close();
-						// exit
+						newList.sendQuery(con.stmt);
+					} else if (optionInt == 3) {
+						UpdateListing updList = new UpdateListing(login);
+						while (updList.hasMoreInputs()) {
+							updList.showInputMessage();
+							while ((inputStr = input.readLine()) == null && inputStr.length() == 0);
+							updList.storeInput(inputStr, con.stmt);
+						}
+						updList.sendQuery(con.stmt);
+					} else if (optionInt == 10) {
+						DeclareTrust trust = new DeclareTrust(login);
+						while (trust.hasMoreInputs()) {
+							trust.showInputMessage();
+							while ((inputStr = input.readLine()) == null && inputStr.length() == 0);
+							trust.storeInput(inputStr, con.stmt);
+						}
+						trust.sendQuery(con.stmt);
 					} else if (optionInt == 0) {   
 						login = null;
 						System.out.println("Logged out.\n"); 

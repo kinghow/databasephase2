@@ -51,7 +51,7 @@ public class UserLogin extends InputSystem {
 		try {
 			String query = "SELECT * FROM Users WHERE login='"+login+"' AND password='"+password+"'";
 			ResultSet results = stmt.executeQuery(query);
-			if (results.next()) {
+			if (results.first()) {
 				System.out.println("\nLogged in as "+login+".\n");
 				return login;
 			} else {
