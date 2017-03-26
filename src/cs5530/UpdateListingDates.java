@@ -5,7 +5,7 @@ import java.sql.Statement;
 public class UpdateListingDates extends InputSystem {
 
 	public UpdateListingDates(String login) {
-		super(num_of_inputs);
+		super(0);
 	}
 
 	@Override
