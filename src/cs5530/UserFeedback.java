@@ -1,6 +1,9 @@
 package cs5530;
 
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class UserFeedback extends InputSystem {
@@ -10,8 +13,8 @@ public class UserFeedback extends InputSystem {
 	private String text;
 	private String login;
 
-	public UserFeedback() {
-		super(1);
+	public UserFeedback(String login) {
+		super(3);
 		this.login = login;
 	}
 
@@ -61,13 +64,33 @@ public class UserFeedback extends InputSystem {
 		completed_inputs = 0;
 		
 		try {
+			try {
+				String query = "SELECT * FROM TH WHERE hid='"+hid+"'";
+				ResultSet results = stmt.executeQuery(query);
+				if (!results.isBeforeFirst()) {
+					System.out.println("\nThe specified house does not exist.\n");
+					return;
+				}
+			}
+			catch (Exception e) { throw(e); }
+			
 			String query = "SELECT * FROM Feedback WHERE hid='"+hid+"' AND login= '"+login+"'";
 			ResultSet results = stmt.executeQuery(query);
 			if (results.isBeforeFirst()) {
-				System.out.println("You have already gave feedback on this house");
+				System.out.println("\nYou have already gave feedback on this house\n");
 			}
 			else {
+				DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				Date date = new Date();
+				query = "INSERT INTO Feedback(text, fbdate, hid, login, score) "+" VALUES ('"+text+"', '"+sdf.format(date)+"', '"+hid+"', '"+login+"', '"+score+"')";
 				
+				int status = stmt.executeUpdate(query);
+				if (status == 0) {
+					System.err.println("Query failed. Feedback was not created.");
+					return;
+				}
+				
+				System.out.println("\nFeedback successfully created.\n");
 			}
 		} catch (Exception e) { throw(e); }
 		
