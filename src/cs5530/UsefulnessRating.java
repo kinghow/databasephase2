@@ -38,16 +38,16 @@ public class UsefulnessRating extends InputSystem {
 				if (pendingRating <= 2 && pendingRating >= 0) {
 					rating = pendingRating;
 					super.addInputs();
-					break;
 				}
-				else {
+				else
 					System.out.println("\nThe value you provided for rating is invalid.\n");
-					return;
-				}
-			} catch (Exception e) {throw (e);}
+			} catch (Exception e) { System.out.println("Please enter an integer.") ;}
+			break;
 		case 1:
-			fid = Integer.parseInt(input);
-			super.addInputs();
+			try {
+				fid = Integer.parseInt(input);
+				super.addInputs();
+			} catch (Exception e) { System.out.println("Please enter an integer."); }
 			break;
 		default:
 			break;

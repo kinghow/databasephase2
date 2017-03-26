@@ -43,14 +43,14 @@ public class UserFeedback extends InputSystem {
 			try {
 				hid = Integer.parseInt(input);
 				super.addInputs();
-				break;
-			} catch (Exception e) {throw(e);}
+			} catch (Exception e) { System.out.println("Please enter an integer."); }
+			break;
 		case 1:
 			try {
 				score = Integer.parseInt(input);
 				super.addInputs();
-				break;
-			} catch (Exception e) {throw(e);}
+			} catch (Exception e) { System.out.println("Please enter an integer."); }
+			break;
 		case 2:
 			text = input;
 			super.addInputs();

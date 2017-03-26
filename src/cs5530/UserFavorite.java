@@ -35,8 +35,8 @@ public class UserFavorite extends InputSystem {
 			try {
 				hid = Integer.parseInt(input);
 				super.addInputs();
-				break;
-			} catch (Exception e) {throw(e);}
+			} catch (Exception e) { System.out.println("Please enter an integer."); }
+			break;
 		default:
 			break;
 		}

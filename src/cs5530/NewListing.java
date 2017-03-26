@@ -80,12 +80,16 @@ public class NewListing extends InputSystem {
 			super.addInputs();
 			break;
 		case 4:
-			year_built = Integer.parseInt(input);
-			super.addInputs();
+			try {
+				year_built = Integer.parseInt(input);
+				super.addInputs();
+			} catch (Exception e) { System.out.println("Please enter an integer."); }
 			break;
 		case 5:
-			price = Double.parseDouble(input);
-			super.addInputs();
+			try {
+				price = Double.parseDouble(input);
+				super.addInputs();
+			} catch (Exception e) { System.out.println("Please enter a double."); }
 			break;
 		case 6:
 			street = input;

@@ -68,8 +68,10 @@ public class UpdateListing extends InputSystem {
 	public void storeInput(String input, Statement stmt) throws Exception {
 		switch (completed_inputs) {
 		case 0:
-			hid = Integer.parseInt(input);
-			super.addInputs();
+			try {
+				hid = Integer.parseInt(input);
+				super.addInputs();
+			} catch (Exception e) { System.out.println("Please enter an integer."); }
 			break;
 		case 1:
 			name = input;
@@ -88,12 +90,16 @@ public class UpdateListing extends InputSystem {
 			super.addInputs();
 			break;
 		case 5:
-			year_built = Integer.parseInt(input);
-			super.addInputs();
+			try {
+				year_built = Integer.parseInt(input);
+				super.addInputs();
+			} catch (Exception e) { System.out.println("Please enter an integer."); }
 			break;
 		case 6:
-			price = Double.parseDouble(input);
-			super.addInputs();
+			try {
+				price = Double.parseDouble(input);
+				super.addInputs();
+			} catch (Exception e) { System.out.println("Please enter a double."); }
 			break;
 		case 7:
 			street = input;
