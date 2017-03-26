@@ -1,7 +1,5 @@
 package cs5530;
 
-import java.lang.*;
-import java.sql.*;
 import java.io.*;
 
 public class MainClass {
@@ -27,9 +25,11 @@ public class MainClass {
 		System.out.println(" 4. Show Your Available Listings");
 		System.out.println(" 5. Update Available Dates for a Listing");
 		System.out.println(" 6. Show Other Available Listings");
+		System.out.println(" 7. Rate a User's Feedback");
+		System.out.println(" 8. Give Feedback on a House");
 		System.out.println(" 9. Add Favourite House");
 		System.out.println("10. Declare/Update Trust on User");
-		System.out.println(" 0. Main Menu");
+		System.out.println(" 0. Log Out");
 		System.out.print("Please choose an option: ");
 	}
 	
@@ -38,8 +38,6 @@ public class MainClass {
 		
 		String inputStr;
 		int optionInt = 0;
-		
-		//String sql = null;
 		
 		try {
 			con = new Connector();
@@ -136,6 +134,22 @@ public class MainClass {
 						updListDates.sendQuery(con.stmt);
 					} else if (optionInt == 6) {
 						ShowTables.displayOtherUserListings(login, con.stmt);
+					} else if (optionInt == 7) {
+						UsefulnessRating rating = new UsefulnessRating(login);
+						while (rating.hasMoreInputs()) {
+							rating.showInputMessage();
+							while ((inputStr = input.readLine()) == null && inputStr.length() == 0);
+							rating.storeInput(inputStr, con.stmt);
+						}
+						rating.sendQuery(con.stmt);
+					} else if (optionInt == 8) {
+						UserFeedback fdbk = new UserFeedback(login);
+						while (fdbk.hasMoreInputs()) {
+							fdbk.showInputMessage();
+							while ((inputStr = input.readLine()) == null && inputStr.length() == 0);
+							fdbk.storeInput(inputStr, con.stmt);
+						}
+						fdbk.sendQuery(con.stmt);
 					} else if (optionInt == 9) {
 						UserFavorite fav = new UserFavorite(login);
 						while (fav.hasMoreInputs()) {

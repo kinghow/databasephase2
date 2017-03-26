@@ -43,8 +43,10 @@ public class UpdateListingDates extends InputSystem {
 	public void storeInput(String input, Statement stmt) throws Exception {
 		switch (completed_inputs) {
 		case 0:
-			hid = Integer.parseInt(input);
-			super.addInputs();
+			try {
+				hid = Integer.parseInt(input);
+				super.addInputs();
+			} catch (Exception e) { System.out.println("Please enter an integer."); }
 			break;
 		case 1:
 			if (input.matches("[1-2][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]")) {
@@ -61,8 +63,10 @@ public class UpdateListingDates extends InputSystem {
 				System.out.println("Please enter the date in the correct format.");
 			break;
 		case 3:
-			price = Double.parseDouble(input);
-			super.addInputs();
+			try {
+				price = Double.parseDouble(input);
+				super.addInputs();
+			} catch (Exception e) { System.out.println("Please enter a double."); }
 			break;
 		default:
 			break;
