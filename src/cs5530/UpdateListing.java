@@ -27,7 +27,7 @@ public class UpdateListing extends InputSystem {
 	public void showInputMessage() {
 		switch (completed_inputs) {
 		case 0:
-			System.out.print("Hid of record to be updated: ");
+			System.out.print("Hid of listing to be updated: ");
 			break;
 		case 1:
 			System.out.print("TH name: ");

@@ -125,6 +125,14 @@ public class MainClass {
 						updList.sendQuery(con.stmt);
 					} else if (optionInt == 4) {
 						ShowTables.displayAvailableUserListings(login, con.stmt);
+					} else if (optionInt == 5) {
+						UpdateListingDates updListDates = new UpdateListingDates(login);
+						while (updListDates.hasMoreInputs()) {
+							updListDates.showInputMessage();
+							while ((inputStr = input.readLine()) == null && inputStr.length() == 0);
+							updListDates.storeInput(inputStr, con.stmt);
+						}
+						updListDates.sendQuery(con.stmt);
 					} else if (optionInt == 9) {
 						UserFavorite fav = new UserFavorite(login);
 						while (fav.hasMoreInputs()) {
