@@ -29,24 +29,11 @@ public class UserFavorite extends InputSystem {
 	}
 
 	@Override
-	public void storeInput(String input, Statement stmt) throws Exception {
-		boolean failed = false;
-		
+	public void storeInput(String input, Statement stmt) throws Exception {		
 		switch (completed_inputs) {
 		case 0:
-			try {
-				String query = "SELECT * FROM TH WHERE hid='"+input+"'";
-				ResultSet results = stmt.executeQuery(query);
-				failed = results.isBeforeFirst();
-				if (failed) {
-					hid = Integer.parseInt(input);
-					super.addInputs();
-				}
-				else {
-					System.out.println("The specified house does not exist. Please input an existing house ID");
-				}
-			}
-			catch (Exception e) {throw(e);}
+			hid = Integer.parseInt(input);
+			super.addInputs();
 			break;
 		}
 		
@@ -60,10 +47,21 @@ public class UserFavorite extends InputSystem {
 		completed_inputs = 0;
 		
 		try {
+			try {
+				String query = "SELECT * FROM TH WHERE hid='"+hid+"'";
+				ResultSet results = stmt.executeQuery(query);
+				if (!results.isBeforeFirst()) {
+					System.out.println("\nThe specified house does not exist.\n");
+					return;
+				}
+			}
+			catch (Exception e) { throw(e); }
+			
+			
 			String query = "SELECT * FROM Favorites WHERE login='"+login+"' AND hid='"+hid+"'";
 			ResultSet results = stmt.executeQuery(query);
 			if(results.isBeforeFirst()) {
-				System.out.println("You have already favorited the specified house");
+				System.out.println("\nYou have already favorited the specified house.\n");
 			}
 			else {
 				DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

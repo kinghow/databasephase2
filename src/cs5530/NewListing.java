@@ -133,7 +133,7 @@ public class NewListing extends InputSystem {
 				return;
 			}
 			
-			System.out.println("\nTH created.\n");
+			System.out.println("\nListing created.\n");
 		} catch (Exception e) { throw(e); }
 	}
 }

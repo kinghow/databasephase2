@@ -87,8 +87,8 @@ public class UpdateListingDates extends InputSystem {
 					if (((from.before(rowFrom) || from.equals(rowFrom)) && (to.after(rowFrom) || to.equals(rowFrom))) ||
 						((from.before(rowTo) || from.equals(rowTo)) && (to.after(rowTo) || to.equals(rowTo))) ||
 						((from.after(rowFrom) || from.equals(rowFrom)) && (to.before(rowTo) || to.equals(rowTo)))) {
-						System.out.println("\nUpdate failed. Conflict with listing "+results.getInt("th.hid")+", '"+results.getString("th.name")+
-								"', with available dates "+results.getDate("p.fromDate")+" to "+results.getDate("p.toDate")+"\n");
+						System.out.println("\nUpdate failed. Conflict with available dates from "+rowFrom+
+								" to "+rowTo+"\n");
 						return;
 					}
 				}
@@ -123,10 +123,14 @@ public class UpdateListingDates extends InputSystem {
 					
 					query = "INSERT INTO Available (hid, pid, price_per_night) VALUES ("+hid+","+results.getInt("pid")+", "+price+")";
 					stmt.executeUpdate(query);
+					
+					System.out.println("\nUpdated listing dates for "+hid+"\n");
 				}
 				else
-					System.out.println("\nHid does not exist or you do not have the permissions to edit the available dates for the listing.\n");
+					System.out.println("\nListing does not exist or you do not own the listing.\n");
 			}
+			
+			results.close();
 		} catch (Exception e) { throw(e); }
 	}
 }

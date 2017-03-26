@@ -136,9 +136,9 @@ public class UpdateListing extends InputSystem {
 			
 			int status = stmt.executeUpdate(query);
 			if (status == 0)
-				System.out.println("\nHid does not exist or you do not have the permissions to edit the listing.\n");
+				System.out.println("\nListing does not exist or you do not own the listing.\n");
 			else
-				System.out.println("\nRecord updated.\n");
+				System.out.println("\nListing updated.\n");
 		} catch (Exception e) { throw(e); }
 	}
 }
