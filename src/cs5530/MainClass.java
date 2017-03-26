@@ -24,6 +24,7 @@ public class MainClass {
 		System.out.println(" 1. Show Your Listings");
 		System.out.println(" 2. New Listing");
 		System.out.println(" 3. Update Listing");
+		System.out.println(" 9. Add Favorite House");
 		System.out.println("10. Declare/Update Trust on User");
 		System.out.println(" 0. Main Menu");
 		System.out.print("Please choose an option: ");
@@ -120,6 +121,14 @@ public class MainClass {
 							updList.storeInput(inputStr, con.stmt);
 						}
 						updList.sendQuery(con.stmt);
+					} else if (optionInt == 9) {
+						UserFavorite favorite = new UserFavorite(login);
+						while (favorite.hasMoreInputs()) {
+							favorite.showInputMessage();
+							while ((inputStr = input.readLine()) == null && inputStr.length() == 0);
+							favorite.storeInput(inputStr, con.stmt);
+						}
+						favorite.sendQuery(con.stmt);
 					} else if (optionInt == 10) {
 						DeclareTrust trust = new DeclareTrust(login);
 						while (trust.hasMoreInputs()) {
