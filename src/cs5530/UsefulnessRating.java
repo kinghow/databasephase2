@@ -32,16 +32,19 @@ public class UsefulnessRating extends InputSystem {
 	public void storeInput(String input, Statement stmt) throws Exception {
 		switch(completed_inputs) {
 		case 0:
-			int pendingRating = Integer.parseInt(input);
-			if (pendingRating <= 2 && pendingRating >= 0) {
-				rating = pendingRating;
-				super.addInputs();
-				break;
-			}
-			else {
-				System.out.println("\nThe value you provided for rating is invalid.\n");
-				return;
-			}
+			try {
+				int pendingRating = Integer.parseInt(input);
+			
+				if (pendingRating <= 2 && pendingRating >= 0) {
+					rating = pendingRating;
+					super.addInputs();
+					break;
+				}
+				else {
+					System.out.println("\nThe value you provided for rating is invalid.\n");
+					return;
+				}
+			} catch (Exception e) {throw (e);}
 		case 1:
 			fid = Integer.parseInt(input);
 			super.addInputs();

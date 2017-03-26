@@ -40,13 +40,17 @@ public class UserFeedback extends InputSystem {
 		
 		switch (completed_inputs) {
 		case 0:
-			hid = Integer.parseInt(input);
-			super.addInputs();
-			break;
+			try {
+				hid = Integer.parseInt(input);
+				super.addInputs();
+				break;
+			} catch (Exception e) {throw(e);}
 		case 1:
-			score = Integer.parseInt(input);
-			super.addInputs();
-			break;
+			try {
+				score = Integer.parseInt(input);
+				super.addInputs();
+				break;
+			} catch (Exception e) {throw(e);}
 		case 2:
 			text = input;
 			super.addInputs();

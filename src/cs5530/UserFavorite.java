@@ -32,8 +32,12 @@ public class UserFavorite extends InputSystem {
 	public void storeInput(String input, Statement stmt) throws Exception {		
 		switch (completed_inputs) {
 		case 0:
-			hid = Integer.parseInt(input);
-			super.addInputs();
+			try {
+				hid = Integer.parseInt(input);
+				super.addInputs();
+				break;
+			} catch (Exception e) {throw(e);}
+		default:
 			break;
 		}
 		
