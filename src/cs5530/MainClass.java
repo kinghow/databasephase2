@@ -26,6 +26,7 @@ public class MainClass {
 		System.out.println(" 5. Update Available Dates for a Listing");
 		System.out.println(" 6. Browse Listings / Make Reservations");
 		System.out.println(" 7. Show Your Confirmed Reservations");
+		System.out.println(" 8. Record a Stay");
 		System.out.println("11. Check for two-degrees of separation");
 		System.out.println("12. Find IDs of top feedbacks for a House");
 		System.out.println("13. Rate a User's Feedback");
@@ -168,6 +169,16 @@ public class MainClass {
 							System.out.println();
 						} else
 							System.out.println("\nGoing back to user menu.\n");
+					} else if (optionInt == 7) {
+						ShowTables.displayConfirmedReservations(login, con.stmt);
+					} else if (optionInt == 8) {
+						RecordStay recordStay = new RecordStay(login);
+						while (recordStay.hasMoreInputs()) {
+							recordStay.showInputMessage();
+							while ((inputStr = input.readLine()) == null && inputStr.length() == 0);
+							recordStay.storeInput(inputStr, con.stmt);
+						}
+						System.out.println();
 					} else if (optionInt == 11) {
 						TwoDegrees twoDegs = new TwoDegrees();
 						while (twoDegs.hasMoreInputs()) {
@@ -192,8 +203,6 @@ public class MainClass {
 							rating.storeInput(inputStr, con.stmt);
 						}
 						rating.sendQuery(con.stmt);
-					} else if (optionInt == 7) {
-						ShowTables.displayConfirmedReservations(login, con.stmt);
 					} else if (optionInt == 14) {
 						UserFeedback fdbk = new UserFeedback(login);
 						while (fdbk.hasMoreInputs()) {
