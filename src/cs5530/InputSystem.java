@@ -4,8 +4,8 @@ import java.sql.Statement;
 
 public abstract class InputSystem {
 
-	public static int max_inputs = 0;
-	public static int completed_inputs = 0;
+	public int max_inputs = 0;
+	public int completed_inputs = 0;
 	
 	public InputSystem(int num_of_inputs) {
 		max_inputs = num_of_inputs;
