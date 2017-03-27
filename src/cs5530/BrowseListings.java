@@ -2,7 +2,6 @@ package cs5530;
 
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class BrowseListings extends InputSystem {
@@ -227,7 +226,7 @@ public class BrowseListings extends InputSystem {
 			
 			String query = "";
 			if (keyword.equals("%")) {
-				query = "SELECT th.*, a.price_per_night, p.pid, p.fromDate, p.toDate, "
+				query = "SELECT th.*, "
 							+ "SUM(fb.score)/(SELECT COUNT(*) "
 							+ "FROM TH th3, Feedback fb2 "
 							+ "WHERE fb2.hid=th3.hid AND th.hid=th3.hid) AS avgScore, "
@@ -235,16 +234,16 @@ public class BrowseListings extends InputSystem {
 							+ "FROM TH th2, Feedback fb3, Trust tr "
 							+ "WHERE fb3.hid=th2.hid AND th.hid=th2.hid "
 								+ "AND tr.login1='"+login+"' AND th.login=tr.login2 AND tr.isTrusted=1) AS avgTrustScore "
-						+ "FROM TH th, Available a, Feedback fb, Period p "
-						+ "WHERE th.hid=a.hid AND fb.hid=th.hid AND a.pid=p.pid AND th.login!='"+login+"' "
-							+ "AND a.price_per_night>="+priceLow+" "
-							+ "AND a.price_per_night<="+priceHigh+" AND th.login LIKE '"+username+"' "
+						+ "FROM TH th LEFT OUTER JOIN Feedback fb ON th.hid=fb.hid "
+						+ "WHERE th.login!='"+login+"' "
+							+ "AND th.price>="+priceLow+" "
+							+ "AND th.price<="+priceHigh+" AND th.login LIKE '"+username+"' "
 							+ "AND th.name LIKE '"+name+"' AND th.category LIKE '"+category+"' "
 							+ "AND th.city LIKE '"+city+"' AND th.state LIKE '"+state+"' "
-						+ "GROUP BY th.hid, a.price_per_night, p.pid, p.fromDate, p.toDate "
+						+ "GROUP BY th.hid "
 						+ sort;
 			} else {
-				query = "SELECT th.*, a.price_per_night, p.pid, p.fromDate, p.toDate, "
+				query = "SELECT th.*, "
 						+ "SUM(fb.score)/(SELECT COUNT(*) "
 						+ "FROM TH th3, Feedback fb2 "
 						+ "WHERE fb2.hid=th3.hid AND th.hid=th3.hid) AS avgScore, "
@@ -252,14 +251,14 @@ public class BrowseListings extends InputSystem {
 						+ "FROM TH th2, Feedback fb3, Trust tr "
 						+ "WHERE fb3.hid=th2.hid AND th.hid=th2.hid "
 							+ "AND tr.login1='"+login+"' AND th.login=tr.login2 AND tr.isTrusted=1) AS avgTrustScore "
-					+ "FROM TH th, Available a, Feedback fb, Period p, Keywords k, HasKeywords hk "
-					+ "WHERE th.hid=a.hid AND fb.hid=th.hid AND a.pid=p.pid AND th.login!='"+login+"' "
-						+ "AND a.price_per_night>="+priceLow+" "
-						+ "AND a.price_per_night<="+priceHigh+" AND th.login LIKE '"+username+"' "
+					+ "FROM TH th LEFT OUTER JOIN Feedback fb ON th.hid=fb.hid, Keywords k, HasKeywords hk "
+					+ "WHERE th.login!='"+login+"' "
+						+ "AND th.price>="+priceLow+" "
+						+ "AND th.price<="+priceHigh+" AND th.login LIKE '"+username+"' "
 						+ "AND hk.hid=th.hid AND k.word=hk.word AND k.language=hk.language "
 						+ "AND th.name LIKE '"+name+"' AND th.category LIKE '"+category+"' "
 						+ "AND th.city LIKE '"+city+"' AND th.state LIKE '"+state+"' AND hk.word LIKE '"+keyword+"' "
-					+ "GROUP BY th.hid, a.price_per_night, p.pid, p.fromDate, p.toDate "
+					+ "GROUP BY th.hid "
 					+ sort;
 			}
 			ResultSet results = stmt.executeQuery(query);
@@ -267,9 +266,9 @@ public class BrowseListings extends InputSystem {
 			if (results.isBeforeFirst()) {				
 				// print headings
 				System.out.println("Available listings:\n");
-				System.out.printf("| %1$3s | %2$3s | %3$-15s | %4$-15s | %5$-15s | %6$-20s | %7$-11s | %8$-8s | %9$-15s | %10$-10s | %11$-10s | %12$-10s | %13$-10s | %14$-20s |\n",
-						"hId", "pId", "Owner", "Category", "Name", "Address", "Price/Night", "AvgScore", "TrustedAvgScore", "From", "To", "Phone Num.", "Year Built", "URL");
-				System.out.println(String.format("%0" + 208 + "d", 0).replace("0","-"));
+				System.out.printf("| %1$3s | %2$-15s | %3$-15s | %4$-15s | %5$-20s | %6$-11s | %7$-8s | %8$-15s | %9$-10s | %10$-10s | %11$-20s |\n",
+						"hId", "Owner", "Category", "Name", "Address", "Price/Night", "AvgScore", "TrustedAvgScore", "Phone Num.", "Year Built", "URL");
+				System.out.println(String.format("%0" + 176 + "d", 0).replace("0","-"));
 				
 				while (results.next()) {
 					String address = results.getString("th.street")+", "+results.getString("th.city")+", "+results.getString("th.state")+" "+results.getString("th.zipcode");
@@ -292,14 +291,13 @@ public class BrowseListings extends InputSystem {
 					// print result according to the number of lines
 					for (int i = 0; i < max; ++i) {
 						if (i == 0)
-							System.out.printf("| %1$3d | %2$3d | %3$-15s | %4$-15s | %5$-15s | %6$-20s | %7$11.2f | %8$8.2f | %9$15.2f | %10$-10s | %11$-10s | %12$-10s | %13$10d | %14$-20s |\n",
-									results.getInt("th.hid"), results.getInt("p.pid"), ownLines.get(i), catLines.get(i), nameLines.get(i), addrLines.get(i),
-									results.getDouble("a.price_per_night"), results.getDouble("avgScore"), results.getDouble("avgTrustScore"),
-									results.getDate("p.fromDate"), results.getDate("p.toDate"),
+							System.out.printf("| %1$3d | %2$-15s | %3$-15s | %4$-15s | %5$-20s | %6$11.2f | %7$8.2f | %8$15.2f | %9$-10s | %10$10d | %11$-20s |\n",
+									results.getInt("th.hid"), ownLines.get(i), catLines.get(i), nameLines.get(i), addrLines.get(i),
+									results.getDouble("th.price"), results.getDouble("avgScore"), results.getDouble("avgTrustScore"),
 									results.getString("phone_num"), results.getInt("year_built"), urlLines.get(i));
 						else
-							System.out.printf("| %1$3s | %2$3s | %3$-15s | %4$-15s | %5$-15s | %6$-20s | %7$11s | %8$8s | %9$15s | %10$-10s | %11$-10s | %12$-10s | %13$10s | %14$-20s |\n",
-									" ", " ", ownLines.get(i), catLines.get(i), nameLines.get(i), addrLines.get(i), " ", " ", " ", " ", " ", " ", " ", urlLines.get(i));
+							System.out.printf("| %1$3s | %2$-15s | %3$-15s | %4$-15s | %5$-20s | %6$11s | %7$8s | %8$15s | %9$-10s | %10$10s | %11$-20s |\n",
+									" ", ownLines.get(i), catLines.get(i), nameLines.get(i), addrLines.get(i), " ", " ", " ", " ", " ", urlLines.get(i));
 					}
 				}
 				

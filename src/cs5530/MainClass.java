@@ -24,11 +24,12 @@ public class MainClass {
 		System.out.println(" 3. Update Listing");
 		System.out.println(" 4. Show Your Available Listings");
 		System.out.println(" 5. Update Available Dates for a Listing");
-		System.out.println(" 6. Show Other Available Listings");
+		System.out.println(" 6. Browse Listings / Make Reservations");
+		System.out.println(" 7. Show Your Confirmed Reservations");
 		System.out.println("13. Rate a User's Feedback");
 		System.out.println("14. Give Feedback on a House");
 		System.out.println("15. Add Favourite House");
-		System.out.println("16. Declare/Update Trust on User");
+		System.out.println("16. Declare / Update Trust on User");
 		System.out.println(" 0. Log Out");
 		System.out.print("Please choose an option: ");
 	}
@@ -133,14 +134,38 @@ public class MainClass {
 						}
 						updListDates.sendQuery(con.stmt);
 					} else if (optionInt == 6) {
-						BrowseListings browse = new BrowseListings(login);
-						while (browse.hasMoreInputs()) {
-							browse.showInputMessage();
-							while ((inputStr = input.readLine()) == null && inputStr.length() == 0);
-							browse.storeInput(inputStr, con.stmt);
-						}
-						browse.sendQuery(con.stmt);
-						//ShowTables.displayOtherUserListings(login, con.stmt);
+						do {
+							BrowseListings browse = new BrowseListings(login);
+							while (browse.hasMoreInputs()) {
+								browse.showInputMessage();
+								while ((inputStr = input.readLine()) == null && inputStr.length() == 0);
+								browse.storeInput(inputStr, con.stmt);
+							}
+							browse.sendQuery(con.stmt);
+							
+							System.out.print("Continue searching(C), make a reservation(R) or exit(E)?: ");
+							
+							while (!(inputStr.equalsIgnoreCase("R") || inputStr.equalsIgnoreCase("E") || inputStr.equalsIgnoreCase("C"))) {
+								while ((inputStr = input.readLine()) == null && inputStr.length() == 0);
+								if (!(inputStr.equalsIgnoreCase("R") || inputStr.equalsIgnoreCase("E") || inputStr.equalsIgnoreCase("C")))
+									System.out.print("Unknown option. Please enter C, R or E: ");
+							}
+							
+							if (inputStr.equalsIgnoreCase("R") || inputStr.equalsIgnoreCase("E"))
+								break;
+							else if (inputStr.equalsIgnoreCase("C"))
+								System.out.println("\nContinuing...\n");
+						} while (inputStr.equalsIgnoreCase("C"));
+						if (!inputStr.equalsIgnoreCase("E")) {
+							Reserve reserve = new Reserve(login);
+							while (reserve.hasMoreInputs()) {
+								reserve.showInputMessage();
+								while ((inputStr = input.readLine()) == null && inputStr.length() == 0);
+								reserve.storeInput(inputStr, con.stmt);
+							}
+							System.out.println();
+						} else
+							System.out.println("\nGoing back to user menu.\n");
 					} else if (optionInt == 13) {
 						UsefulnessRating rating = new UsefulnessRating(login);
 						while (rating.hasMoreInputs()) {
@@ -149,6 +174,8 @@ public class MainClass {
 							rating.storeInput(inputStr, con.stmt);
 						}
 						rating.sendQuery(con.stmt);
+					} else if (optionInt == 7) {
+						ShowTables.displayConfirmedReservations(login, con.stmt);
 					} else if (optionInt == 14) {
 						UserFeedback fdbk = new UserFeedback(login);
 						while (fdbk.hasMoreInputs()) {

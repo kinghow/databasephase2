@@ -2,6 +2,8 @@ package cs5530;
 
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class ShowTables {	
@@ -127,6 +129,46 @@ public class ShowTables {
 				System.out.println();
 			} else
 				System.out.println("There are currently no listings.\n");
+		} catch (Exception e) { throw(e); }
+	}
+	
+	public static void displayConfirmedReservations(String login, Statement stmt) throws Exception {
+		try {
+			String query = "SELECT * FROM TH th, Reserve r WHERE r.login='"+login+"' AND r.hid=th.hid";
+			ResultSet results = stmt.executeQuery(query);
+			if (results.isBeforeFirst()) {				
+				// print headings
+				System.out.println("Your confirmed reservations:\n");
+				System.out.printf("| %1$-3s | %2$-15s | %3$-20s | %4$-11s | %5$-10s : %6$-10s |\n",
+						"rId", "Name", "Address", "Price/Night", "From", "To");
+				System.out.println(String.format("%0" + 88 + "d", 0).replace("0","-"));
+				
+				while (results.next()) {
+					String address = results.getString("th.street")+", "+results.getString("th.city")+", "+results.getString("th.state")+" "+results.getString("th.zipcode");
+					ArrayList<String> addrLines = ShowTables.splitIntoLines(address, " ", 20);
+					ArrayList<String> nameLines = ShowTables.splitIntoLines(results.getString("th.name"), " ", 15);
+					
+					int max = Math.max(nameLines.size(), addrLines.size());
+					while (nameLines.size() != max || addrLines.size() != max) {
+						if (nameLines.size() < max) nameLines.add(" ");
+						if (addrLines.size() < max) addrLines.add(" ");
+					}
+					
+					// print result according to the number of lines
+					for (int i = 0; i < max; ++i) {
+						if (i == 0)
+							System.out.printf("| %1$3d | %2$-15s | %3$-20s | %4$11.2f | %5$-10s : %6$-10s |\n",
+									results.getInt("r.rid"), nameLines.get(i), addrLines.get(i), results.getDouble("r.price_per_night"),
+									results.getDate("r.fromDate"), results.getDate("r.toDate"));
+						else
+							System.out.printf("| %1$3s | %2$-15s | %3$-20s | %4$11s | %5$-10s : %6$-10s |\n",
+									" ", nameLines.get(i), addrLines.get(i), " ", " ", " ");
+					}
+				} 
+				
+				System.out.println();
+			} else
+				System.out.println("You have no confirmed reservations.\n");
 		} catch (Exception e) { throw(e); }
 	}
 	

@@ -58,6 +58,13 @@ public class UpdateListingDates extends InputSystem {
 		case 2:
 			if (input.matches("[1-2][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]")) {
 				to = new SimpleDateFormat("yyyy-MM-dd").parse(input);
+				
+				if (from.before(new java.util.Date()) || to.before(new java.util.Date()) || from.after(to)) {
+					System.out.println("\nDate range invalid. Must be after today's date.");
+					completed_inputs = 0;
+					return;
+				}
+				
 				super.addInputs();
 			} else
 				System.out.println("Please enter a valid date.");
