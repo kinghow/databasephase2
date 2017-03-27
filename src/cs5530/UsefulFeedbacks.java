@@ -1,6 +1,5 @@
 package cs5530;
 
-import java.awt.List;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,7 +10,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 
 public class UsefulFeedbacks extends InputSystem {
 	
@@ -39,8 +37,6 @@ public class UsefulFeedbacks extends InputSystem {
 	            }
 	       });
 
-	       // Here I am copying the sorted list in HashMap
-	       // using LinkedHashMap to preserve the insertion order
 	       HashMap sortedHashMap = new LinkedHashMap();
 	       for (Iterator it = list.iterator(); it.hasNext();) {
 	              Map.Entry entry = (Map.Entry) it.next();
