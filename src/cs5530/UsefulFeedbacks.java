@@ -1,9 +1,14 @@
 package cs5530;
 
+import java.awt.List;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -13,7 +18,7 @@ public class UsefulFeedbacks extends InputSystem {
 	private int hid;
 	private int numberOfFeedbacks;
 
-	private HashMap<Double, Integer> averageScores = new HashMap<Double, Integer>();
+	private HashMap<Integer, Double> averageScores = new HashMap<Integer, Double>();
 	private int ratingSum;
 	private int numEntries;
 	private ArrayList<Integer> fids = new ArrayList<Integer>();
@@ -23,6 +28,26 @@ public class UsefulFeedbacks extends InputSystem {
 	public UsefulFeedbacks() {
 		super(2);
 	}
+	
+	private static HashMap sortByValues(HashMap map) { 
+	       LinkedList list = new LinkedList(map.entrySet());
+
+	       Collections.sort(list, new Comparator() {
+	            public int compare(Object o1, Object o2) {
+	               return ((Comparable) ((Map.Entry) (o1)).getValue())
+	                  .compareTo(((Map.Entry) (o2)).getValue());
+	            }
+	       });
+
+	       // Here I am copying the sorted list in HashMap
+	       // using LinkedHashMap to preserve the insertion order
+	       HashMap sortedHashMap = new LinkedHashMap();
+	       for (Iterator it = list.iterator(); it.hasNext();) {
+	              Map.Entry entry = (Map.Entry) it.next();
+	              sortedHashMap.put(entry.getKey(), entry.getValue());
+	       } 
+	       return sortedHashMap;
+	  }
 
 	@Override
 	public void showInputMessage() {
@@ -85,9 +110,7 @@ public class UsefulFeedbacks extends InputSystem {
 			ResultSet results = stmt.executeQuery(query);
 			if (results.isBeforeFirst()) {
 				while (results.next()) {
-					System.out.println(results.getInt("fid"));
 					int currentFID = results.getInt("fid");
-					System.out.println("Current FID: " + currentFID);
 					fids.add(currentFID);
 				}
 				for (int id : fids) {
@@ -101,25 +124,29 @@ public class UsefulFeedbacks extends InputSystem {
 							numEntries++;
 						}
 						double averageScore = ratingSum/numEntries;
-						System.out.println(ratingSum);
-						System.out.println(numEntries);
-						System.out.println(averageScore);
-						averageScores.put(averageScore, id);
+						averageScores.put(id, averageScore);
 					}
 					else {
-						averageScores.put(0.0, id);
+						averageScores.put(id, 0.0);
 					}
 				}
 					
 				}
-				Map<Double, Integer> sortedFIDs = new TreeMap<Double, Integer>(averageScores);
+				Map<Integer, Double> sortedFIDs = sortByValues(averageScores);
 				Set setOfFIDs = sortedFIDs.entrySet();
 		        Iterator iterator = setOfFIDs.iterator();
 		        int i = 0;
-		        while(iterator.hasNext()) {
+		        System.out.println("\n");
+		        while(iterator.hasNext() && i < numberOfFeedbacks) {
 		        	i++;
 		        	Map.Entry me = (Map.Entry)iterator.next();
-		        	System.out.println(i + ": " + me.getValue());
+		        	System.out.println(i + ": " + me.getKey());
+		        }
+		        if (i < numberOfFeedbacks) {
+		        	System.out.println("\nThe specified number of feedbacks was larger than the available feedbacks.\n");
+		        }
+		        else {
+		        	System.out.println("\n");
 		        }
 			} catch (Exception e) { throw (e); }
 	}
