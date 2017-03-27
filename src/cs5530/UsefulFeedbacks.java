@@ -36,6 +36,8 @@ public class UsefulFeedbacks extends InputSystem {
 	                  .compareTo(((Map.Entry) (o2)).getValue());
 	            }
 	       });
+	       
+	       Collections.reverse(list);
 
 	       HashMap sortedHashMap = new LinkedHashMap();
 	       for (Iterator it = list.iterator(); it.hasNext();) {
