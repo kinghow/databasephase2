@@ -5,7 +5,7 @@ import java.io.*;
 public class MainClass {
 
 	private static final int MAX_MAIN_OPTIONS = 2;
-	private static final int MAX_USER_OPTIONS = 16;
+	private static final int MAX_USER_OPTIONS = 20;
 	
 	private static String login;
 	
@@ -30,11 +30,12 @@ public class MainClass {
 		System.out.println(" 9. List n Most Popular Listings for each Category");
 		System.out.println("10. List n Most Expensive Listings for each Category");
 		System.out.println("11. List n Most Highly Rated Listings for each Category");
-		System.out.println("12. Find IDs of top feedbacks for a House");
-		System.out.println("13. Rate a User's Feedback");
-		System.out.println("14. Give Feedback on a House");
-		System.out.println("15. Add Favourite House");
-		System.out.println("16. Declare / Update Trust on User");
+		System.out.println("15. Check for two-degrees of separation");
+		System.out.println("16. Find IDs of top feedbacks for a House");
+		System.out.println("17. Rate a User's Feedback");
+		System.out.println("18. Give Feedback on a House");
+		System.out.println("19. Add Favourite House");
+		System.out.println("20. Declare / Update Trust on User");
 		System.out.println(" 0. Log Out");
 		System.out.print("Please choose an option: ");
 	}
@@ -205,7 +206,15 @@ public class MainClass {
 							rateByCat.storeInput(inputStr, con.stmt);
 						}
 						rateByCat.sendQuery(con.stmt);
-					} else if (optionInt == 12) {
+					} else if (optionInt == 15) {
+						TwoDegrees twoDegs = new TwoDegrees();
+						while (twoDegs.hasMoreInputs()) {
+							twoDegs.showInputMessage();
+							while ((inputStr = input.readLine()) == null && inputStr.length() == 0);
+							twoDegs.storeInput(inputStr, con.stmt);
+						}
+						twoDegs.sendQuery(con.stmt);
+					} else if (optionInt == 16) {
 						UsefulFeedbacks feedbacks = new UsefulFeedbacks();
 						while (feedbacks.hasMoreInputs()) {
 							feedbacks.showInputMessage();
@@ -213,7 +222,7 @@ public class MainClass {
 							feedbacks.storeInput(inputStr, con.stmt);
 						}
 						feedbacks.sendQuery(con.stmt);
-					} else if (optionInt == 13) {
+					} else if (optionInt == 17) {
 						UsefulnessRating rating = new UsefulnessRating(login);
 						while (rating.hasMoreInputs()) {
 							rating.showInputMessage();
@@ -221,7 +230,7 @@ public class MainClass {
 							rating.storeInput(inputStr, con.stmt);
 						}
 						rating.sendQuery(con.stmt);
-					} else if (optionInt == 14) {
+					} else if (optionInt == 18) {
 						UserFeedback fdbk = new UserFeedback(login);
 						while (fdbk.hasMoreInputs()) {
 							fdbk.showInputMessage();
@@ -229,7 +238,7 @@ public class MainClass {
 							fdbk.storeInput(inputStr, con.stmt);
 						}
 						fdbk.sendQuery(con.stmt);
-					} else if (optionInt == 15) {
+					} else if (optionInt == 19) {
 						UserFavorite fav = new UserFavorite(login);
 						while (fav.hasMoreInputs()) {
 							fav.showInputMessage();
@@ -237,7 +246,7 @@ public class MainClass {
 							fav.storeInput(inputStr, con.stmt);
 						}
 						fav.sendQuery(con.stmt);
-					} else if (optionInt == 16) {
+					} else if (optionInt == 20) {
 						DeclareTrust trust = new DeclareTrust(login);
 						while (trust.hasMoreInputs()) {
 							trust.showInputMessage();
