@@ -127,10 +127,10 @@ public class RecordStay extends InputSystem{
 					stmt.executeUpdate(query);
 					super.addInputs();
 					
-					System.out.println("Stay recorded.\n");
+					System.out.println("\nStay recorded.");
 				} catch (Exception e) { throw(e); }
 			} else if (input.equalsIgnoreCase("N")) {
-				System.out.println("Record canceled.\n");
+				System.out.println("\nRecord canceled.");
 				completed_inputs = max_inputs;
 			} else
 				System.out.println("Please enter Y or N.");

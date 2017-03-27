@@ -27,6 +27,9 @@ public class MainClass {
 		System.out.println(" 6. Browse Listings / Make Reservations");
 		System.out.println(" 7. Show Your Confirmed Reservations");
 		System.out.println(" 8. Record a Stay");
+		System.out.println(" 9. List n Most Popular Listings for each Category");
+		System.out.println("10. List n Most Expensive Listings for each Category");
+		System.out.println("11. List n Most Highly Rated Listings for each Category");
 		System.out.println("12. Find IDs of top feedbacks for a House");
 		System.out.println("13. Rate a User's Feedback");
 		System.out.println("14. Give Feedback on a House");
@@ -178,6 +181,30 @@ public class MainClass {
 							recordStay.storeInput(inputStr, con.stmt);
 						}
 						System.out.println();
+					} else if (optionInt == 9) {
+						PopularListingsByCat popList = new PopularListingsByCat();
+						while (popList.hasMoreInputs()) {
+							popList.showInputMessage();
+							while ((inputStr = input.readLine()) == null && inputStr.length() == 0);
+							popList.storeInput(inputStr, con.stmt);
+						}
+						popList.sendQuery(con.stmt);
+					} else if (optionInt == 10) {
+						ExpByCat expByCat = new ExpByCat();
+						while (expByCat.hasMoreInputs()) {
+							expByCat.showInputMessage();
+							while ((inputStr = input.readLine()) == null && inputStr.length() == 0);
+							expByCat.storeInput(inputStr, con.stmt);
+						}
+						expByCat.sendQuery(con.stmt);
+					} else if (optionInt == 11) {
+						RateByCat rateByCat = new RateByCat();
+						while (rateByCat.hasMoreInputs()) {
+							rateByCat.showInputMessage();
+							while ((inputStr = input.readLine()) == null && inputStr.length() == 0);
+							rateByCat.storeInput(inputStr, con.stmt);
+						}
+						rateByCat.sendQuery(con.stmt);
 					} else if (optionInt == 12) {
 						UsefulFeedbacks feedbacks = new UsefulFeedbacks();
 						while (feedbacks.hasMoreInputs()) {
