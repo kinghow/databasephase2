@@ -36,10 +36,10 @@ public class DeclareTrust extends InputSystem {
 			super.addInputs();
 			break;
 		case 1:
-			if (input.equals("Y") || input.equals("y")) {
+			if (input.equalsIgnoreCase("Y")) {
 				isTrusted = 1;
 				super.addInputs();
-			} else if (input.equals("N") || input.equals("n")) {
+			} else if (input.equalsIgnoreCase("N")) {
 				isTrusted = 0;
 				super.addInputs();
 			} else

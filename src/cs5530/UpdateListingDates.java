@@ -53,14 +53,14 @@ public class UpdateListingDates extends InputSystem {
 				from = new SimpleDateFormat("yyyy-MM-dd").parse(input);
 				super.addInputs();
 			} else
-				System.out.println("Please enter the date in the correct format.");
+				System.out.println("Please enter a valid date.");
 			break;
 		case 2:
 			if (input.matches("[1-2][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]")) {
 				to = new SimpleDateFormat("yyyy-MM-dd").parse(input);
 				super.addInputs();
 			} else
-				System.out.println("Please enter the date in the correct format.");
+				System.out.println("Please enter a valid date.");
 			break;
 		case 3:
 			try {

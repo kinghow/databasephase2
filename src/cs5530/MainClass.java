@@ -133,7 +133,14 @@ public class MainClass {
 						}
 						updListDates.sendQuery(con.stmt);
 					} else if (optionInt == 6) {
-						ShowTables.displayOtherUserListings(login, con.stmt);
+						BrowseListings browse = new BrowseListings(login);
+						while (browse.hasMoreInputs()) {
+							browse.showInputMessage();
+							while ((inputStr = input.readLine()) == null && inputStr.length() == 0);
+							browse.storeInput(inputStr, con.stmt);
+						}
+						browse.sendQuery(con.stmt);
+						//ShowTables.displayOtherUserListings(login, con.stmt);
 					} else if (optionInt == 13) {
 						UsefulnessRating rating = new UsefulnessRating(login);
 						while (rating.hasMoreInputs()) {

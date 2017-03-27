@@ -2,6 +2,7 @@ package cs5530;
 
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class UpdateListing extends InputSystem {
 	
@@ -17,9 +18,11 @@ public class UpdateListing extends InputSystem {
 	private String city;
 	private String state;
 	private String zipcode;
+	private ArrayList<String> languages = new ArrayList<String>();
+	private ArrayList<String> keywords = new ArrayList<String>();
 	
 	public UpdateListing(String login) {
-		super(11);
+		super(12);
 		this.login = login;
 	}
 
@@ -27,7 +30,7 @@ public class UpdateListing extends InputSystem {
 	public void showInputMessage() {
 		switch (completed_inputs) {
 		case 0:
-			System.out.print("Hid of listing to be updated: ");
+			System.out.print("hId of listing to be updated: ");
 			break;
 		case 1:
 			System.out.print("TH name: ");
@@ -58,6 +61,11 @@ public class UpdateListing extends InputSystem {
 			break;
 		case 10:
 			System.out.print("Zipcode: ");
+			break;
+		case 11:
+			System.out.println("(Enter e.g., \'[english,eco-friendly,breakfast,...];[spanish,uno]\' (without spaces))");
+			System.out.println("(Leave blank for no keywords)");
+			System.out.print("Keywords: ");
 			break;
 		default:
 			break;
@@ -117,6 +125,24 @@ public class UpdateListing extends InputSystem {
 			zipcode = input;
 			super.addInputs();
 			break;
+		case 11:
+			if (input.matches("(\\[[A-Z-a-z]+(,[A-Z-a-z]+)+\\];?)*")) {
+				String block[] = input.split(";");
+				
+				for (int i = 0; i < block.length; ++i) {
+					String comb[] = block[i].split(",");
+					comb[0] = comb[0].replaceAll("\\[", "");
+					for (int j = 1; j < comb.length; ++j) {
+						comb[j] = comb[j].replaceAll("\\]", "");
+						languages.add(comb[0]);
+						keywords.add(comb[j]);
+					}
+				}
+				
+				super.addInputs();
+			} else
+				System.out.println("Please enter the keywords in the specified format.");
+			break;
 		default:
 			break;
 		}
@@ -129,22 +155,40 @@ public class UpdateListing extends InputSystem {
 		completed_inputs = 0;
 		
 		try {
-			String query = "SELECT * FROM Address WHERE street='"+street+"' AND city='"+city+"' AND state='"+state+
-					"' AND zipcode='"+zipcode+"'";
+			String query = "SELECT * FROM TH WHERE hid="+hid;
 			ResultSet results = stmt.executeQuery(query);
-			if (!results.first()) {
-				query = "INSERT INTO Address VALUES ('"+street+"','"+city+"','"+state+"','"+zipcode+"')";
+			if (results.isBeforeFirst()) {
+				
+				query = "SELECT * FROM Address WHERE street='"+street+"' AND city='"+city+"' AND state='"+state+
+						"' AND zipcode='"+zipcode+"'";
+				results = stmt.executeQuery(query);
+				if (!results.isBeforeFirst()) {
+					query = "INSERT INTO Address VALUES ('"+street+"','"+city+"','"+state+"','"+zipcode+"')";
+					stmt.executeUpdate(query);
+				}
+				
+				query = "DELETE FROM HasKeywords WHERE hid="+hid;
 				stmt.executeUpdate(query);
-			}
-			
-			query = "UPDATE TH SET name='"+name+"', category='"+category+"', url='"+url+"', phone_num='"+phone_num+"', year_built="+year_built+
-					", price="+price+", street='"+street+"', city='"+city+"', state='"+state+"', zipcode='"+zipcode+"' WHERE hid="+hid+" AND login='"+login+"'";
-			
-			int status = stmt.executeUpdate(query);
-			if (status == 0)
-				System.out.println("\nListing does not exist or you do not own the listing.\n");
-			else
+				
+				for (int i = 0; i < keywords.size(); ++i) {
+					query = "SELECT * FROM Keywords WHERE word='"+keywords.get(i)+"' AND language='"+languages.get(i)+"'";
+					results = stmt.executeQuery(query);
+					if (!results.isBeforeFirst()) {
+						query = "INSERT INTO Keywords VALUES ('"+keywords.get(i)+"','"+languages.get(i)+"')";
+						stmt.executeUpdate(query);
+					}
+					
+					query = "INSERT INTO HasKeywords VALUES ("+hid+",'"+keywords.get(i)+"','"+languages.get(i)+"')";
+					stmt.executeUpdate(query);
+				}
+				
+				query = "UPDATE TH SET name='"+name+"', category='"+category+"', url='"+url+"', phone_num='"+phone_num+"', year_built="+year_built+
+						", price="+price+", street='"+street+"', city='"+city+"', state='"+state+"', zipcode='"+zipcode+"' WHERE hid="+hid+" AND login='"+login+"'";
+				stmt.executeUpdate(query);
+				
 				System.out.println("\nListing updated.\n");
+			} else 
+				System.out.println("\nListing does not exist or you do not own the listing.\n");
 		} catch (Exception e) { throw(e); }
 	}
 }
