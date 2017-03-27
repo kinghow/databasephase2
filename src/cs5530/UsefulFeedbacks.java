@@ -1,13 +1,22 @@
 package cs5530;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 public class UsefulFeedbacks extends InputSystem {
 	
-	private HashMap<Double, Integer> averageScores = new HashMap<Double, Integer>();
 	private int hid;
 	private int numberOfFeedbacks;
+
+	private HashMap<Double, Integer> averageScores = new HashMap<Double, Integer>();
+	private int ratingSum;
+	private int numEntries;
+	private ArrayList<Integer> fids = new ArrayList<Integer>();
 	
 	
 	
@@ -56,6 +65,64 @@ public class UsefulFeedbacks extends InputSystem {
 		}
 	}
 	
+	public void sendQuery(Statement stmt) throws Exception {
+		if (hasMoreInputs())
+			return;
+		
+		completed_inputs = 0;
+		
+		try {
+			try {
+				String query = "SELECT * FROM TH WHERE hid= '"+hid+"'";
+				ResultSet results = stmt.executeQuery(query);
+				if (!results.isBeforeFirst()) {
+					System.out.println("\nThe specified house does not exist.\n");
+					return;
+				}			
+			} catch (Exception e) { throw (e); }
+			
+			String query = "SELECT fid FROM Feedback WHERE hid= '"+hid+"'";
+			ResultSet results = stmt.executeQuery(query);
+			if (results.isBeforeFirst()) {
+				while (results.next()) {
+					System.out.println(results.getInt("fid"));
+					int currentFID = results.getInt("fid");
+					System.out.println("Current FID: " + currentFID);
+					fids.add(currentFID);
+				}
+				for (int id : fids) {
+					query = "SELECT rating FROM Rates WHERE fid= '"+id+"'";
+					results = stmt.executeQuery(query);
+					if (results.isBeforeFirst()) {
+						ratingSum = 0;
+						numEntries = 0;
+						while (results.next()) {
+							ratingSum += results.getInt("rating");
+							numEntries++;
+						}
+						double averageScore = ratingSum/numEntries;
+						System.out.println(ratingSum);
+						System.out.println(numEntries);
+						System.out.println(averageScore);
+						averageScores.put(averageScore, id);
+					}
+					else {
+						averageScores.put(0.0, id);
+					}
+				}
+					
+				}
+				Map<Double, Integer> sortedFIDs = new TreeMap<Double, Integer>(averageScores);
+				Set setOfFIDs = sortedFIDs.entrySet();
+		        Iterator iterator = setOfFIDs.iterator();
+		        int i = 0;
+		        while(iterator.hasNext()) {
+		        	i++;
+		        	Map.Entry me = (Map.Entry)iterator.next();
+		        	System.out.println(i + ": " + me.getValue());
+		        }
+			} catch (Exception e) { throw (e); }
+	}
 	
 	
 }

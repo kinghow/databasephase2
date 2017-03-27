@@ -25,6 +25,7 @@ public class MainClass {
 		System.out.println(" 4. Show Your Available Listings");
 		System.out.println(" 5. Update Available Dates for a Listing");
 		System.out.println(" 6. Show Other Available Listings");
+		System.out.println("12. Find IDs of top feedbacks for a House");
 		System.out.println("13. Rate a User's Feedback");
 		System.out.println("14. Give Feedback on a House");
 		System.out.println("15. Add Favourite House");
@@ -141,6 +142,14 @@ public class MainClass {
 						}
 						browse.sendQuery(con.stmt);
 						//ShowTables.displayOtherUserListings(login, con.stmt);
+					} else if (optionInt == 12) {
+						UsefulFeedbacks feedbacks = new UsefulFeedbacks();
+						while (feedbacks.hasMoreInputs()) {
+							feedbacks.showInputMessage();
+							while ((inputStr = input.readLine()) == null && inputStr.length() == 0);
+							feedbacks.storeInput(inputStr, con.stmt);
+						}
+						feedbacks.sendQuery(con.stmt);
 					} else if (optionInt == 13) {
 						UsefulnessRating rating = new UsefulnessRating(login);
 						while (rating.hasMoreInputs()) {
