@@ -30,6 +30,9 @@ public class MainClass {
 		System.out.println(" 9. List n Most Popular Listings for each Category");
 		System.out.println("10. List n Most Expensive Listings for each Category");
 		System.out.println("11. List n Most Highly Rated Listings for each Category");
+		System.out.println("12. List n Most Trusted Users (Admin Only)");
+		System.out.println("13. List n Most Useful Users (Admin Only)");
+		System.out.println("14. Show Feedbacks for a Listing");
 		System.out.println("15. Check for two-degrees of separation");
 		System.out.println("16. Find IDs of top feedbacks for a House");
 		System.out.println("17. Rate a User's Feedback");
@@ -206,6 +209,34 @@ public class MainClass {
 							rateByCat.storeInput(inputStr, con.stmt);
 						}
 						rateByCat.sendQuery(con.stmt);
+					} else if (optionInt == 12) {
+						MostTrusted mostTrusted = new MostTrusted(login, con.stmt);
+						boolean isAdmin = mostTrusted.hasMoreInputs();
+						while (mostTrusted.hasMoreInputs()) {
+							mostTrusted.showInputMessage();
+							while ((inputStr = input.readLine()) == null && inputStr.length() == 0);
+							mostTrusted.storeInput(inputStr, con.stmt);
+						}
+						if (isAdmin)
+							mostTrusted.sendQuery(con.stmt);
+					} else if (optionInt == 13) {
+						MostUseful mostUseful = new MostUseful(login, con.stmt);
+						boolean isAdmin = mostUseful.hasMoreInputs();
+						while (mostUseful.hasMoreInputs()) {
+							mostUseful.showInputMessage();
+							while ((inputStr = input.readLine()) == null && inputStr.length() == 0);
+							mostUseful.storeInput(inputStr, con.stmt);
+						}
+						if (isAdmin)
+							mostUseful.sendQuery(con.stmt);
+					} else if (optionInt == 14) {
+						GetFeedback getFeedback = new GetFeedback(login);
+						while (getFeedback.hasMoreInputs()) {
+							getFeedback.showInputMessage();
+							while ((inputStr = input.readLine()) == null && inputStr.length() == 0);
+							getFeedback.storeInput(inputStr, con.stmt);
+						}
+						getFeedback.sendQuery(con.stmt);
 					} else if (optionInt == 15) {
 						TwoDegrees twoDegs = new TwoDegrees();
 						while (twoDegs.hasMoreInputs()) {
