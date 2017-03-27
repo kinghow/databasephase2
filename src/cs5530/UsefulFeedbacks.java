@@ -134,7 +134,7 @@ public class UsefulFeedbacks extends InputSystem {
 				Set setOfFIDs = sortedFIDs.entrySet();
 		        Iterator iterator = setOfFIDs.iterator();
 		        int i = 0;
-		        System.out.println("\n");
+		        System.out.println();
 		        while(iterator.hasNext() && i < numberOfFeedbacks) {
 		        	i++;
 		        	Map.Entry me = (Map.Entry)iterator.next();

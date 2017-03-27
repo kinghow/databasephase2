@@ -23,6 +23,10 @@ public class Reserve extends InputSystem {
 		super(9);
 		this.login = login;
 	}
+	
+	public int getHID() {
+		return hid;
+	}
 
 	@Override
 	public void showInputMessage() {
@@ -176,6 +180,8 @@ public class Reserve extends InputSystem {
 								reservations.add(new Reservation(hid, from, to, price));
 								System.out.println("\nReservation added.");
 								completed_inputs = 0;
+								Suggestions sugg = new Suggestions(login, hid);
+								sugg.sendQuery(stmt);
 								return;
 							}
 						}

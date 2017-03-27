@@ -171,8 +171,8 @@ public class MainClass {
 								reserve.showInputMessage();
 								while ((inputStr = input.readLine()) == null && inputStr.length() == 0);
 								reserve.storeInput(inputStr, con.stmt);
-							}
-							System.out.println();
+								}
+							System.out.println();							
 						} else
 							System.out.println("\nGoing back to user menu.\n");
 					} else if (optionInt == 7) {
