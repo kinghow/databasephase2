@@ -168,7 +168,7 @@ public class BrowseListings extends InputSystem {
 				int option = Integer.parseInt(input);
 				
 				if (option == 1) {
-					sort = "ORDER BY a.price_per_night";
+					sort = "ORDER BY th.price";
 					sortMessage = "by price, ";
 				} else if (option == 2) {
 					sort = "ORDER BY avgScore";
@@ -251,7 +251,7 @@ public class BrowseListings extends InputSystem {
 						+ "FROM TH th2, Feedback fb3, Trust tr "
 						+ "WHERE fb3.hid=th2.hid AND th.hid=th2.hid "
 							+ "AND tr.login1='"+login+"' AND th.login=tr.login2 AND tr.isTrusted=1) AS avgTrustScore "
-					+ "FROM TH th LEFT OUTER JOIN Feedback fb ON th.hid=fb.hid, Keywords k, HasKeywords hk "
+					+ "FROM TH th LEFT OUTER JOIN Feedback fb ON th.hid=fb.hid, Keywords k, HasKeywords hk, Available a "
 					+ "WHERE th.login!='"+login+"' "
 						+ "AND th.price>="+priceLow+" "
 						+ "AND th.price<="+priceHigh+" AND th.login LIKE '"+username+"' "
